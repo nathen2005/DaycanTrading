@@ -606,11 +606,19 @@
 </head>
 <body>
     <!-- Header -->
-    <header>
+        <header>
         <nav>
-            <div class="logo">
-                <h1>Daycan Trading</h1>
-                <span>Bridging Port of Mombasa to Your Doorstep</span>
+            <div class="logo" style="display: flex; align-items: center; gap: 15px;">
+                <!-- Transparent PNG Logo (Red Background) -->
+                <img src="images/logo.png"
+                     alt="Daycan Trading Logo"
+                     style="height: 60px; width: auto; border-radius: 8px;
+                            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                            transition: transform 0.3s ease;"
+                     onmouseover="this.style.transform='scale(1.05)'"
+                     onmouseout="this.style.transform='scale(1)'">
+                <!-- Tagline -->
+                <span style="color: var(--accent-gold); font-size: 0.9rem; font-style: italic;">Bridging Port Mombasa to Your Doorstep</span>
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Home</a></li>
@@ -1289,4 +1297,5 @@
         }
         </script>
 </body>
+
 </html>
