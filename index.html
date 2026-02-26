@@ -812,7 +812,7 @@
         <nav>
             <div class="logo">
                 <img src="images/logo.png" alt="Daycan Trading Logo">
-                <span>Bridging Mombasa Port to Your Doorstep</span>
+                <span>Bridging Port Mombasa to Your Doorstep</span>
             </div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Home</a></li>
@@ -930,7 +930,7 @@
         </div>
     </section>
 
-    <!-- Fleet Management Tracker Section -->
+        <!-- Fleet Management Tracker Section -->
     <section class="tracker" id="tracker">
         <div class="tracker-box">
             <h3><i class="fas fa-truck"></i> Daycan Fleet Management</h3>
@@ -952,8 +952,8 @@
                 </button>
             </div>
 
-            <!-- Truck Location Search -->
-            <div id="truckSearchTab">
+            <!-- Truck Location Search Section -->
+            <div id="truckSection" style="display: block;">
                 <div class="tracker-form">
                     <input type="text" id="truckSearchInput" placeholder="Enter Truck Number e.g., KDV 852U, KDB 987Z" value="">
                     <button onclick="searchTruck()"><i class="fas fa-search"></i> Track Now</button>
@@ -961,36 +961,39 @@
                 <p style="margin-top: 0.5rem; font-size: 0.8rem;"><i class="fas fa-info-circle"></i> Search by truck registration</p>
             </div>
 
-            <!-- Inspection Search Tab (Hidden) -->
-            <div id="inspectionSearchTab" style="display: none;">
+            <!-- Inspection Search Section -->
+            <div id="inspectionSection" style="display: none;">
                 <div class="search-filter">
                     <input type="text" id="inspectionSearchInput" class="filter-input" placeholder="Search by Truck or Trailer Reg...">
                     <button onclick="searchInspection()" class="filter-btn"><i class="fas fa-search"></i> Search</button>
                     <button onclick="clearInspectionSearch()" class="filter-btn" style="background: #666;"><i class="fas fa-times"></i> Clear</button>
                 </div>
+                <button onclick="showAllInspections()" class="filter-btn" style="margin-top: 0.5rem; background: var(--kenyan-green); width: 100%;">Show All Inspections</button>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem;"><i class="fas fa-info-circle"></i> Search by truck or trailer registration</p>
             </div>
 
-            <!-- Insurance Search Tab (Hidden) -->
-            <div id="insuranceSearchTab" style="display: none;">
+            <!-- Insurance Search Section -->
+            <div id="insuranceSection" style="display: none;">
                 <div class="search-filter">
                     <input type="text" id="insuranceSearchInput" class="filter-input" placeholder="Search by Truck or Trailer Reg...">
                     <button onclick="searchInsurance()" class="filter-btn"><i class="fas fa-search"></i> Search</button>
                     <button onclick="clearInsuranceSearch()" class="filter-btn" style="background: #666;"><i class="fas fa-times"></i> Clear</button>
                 </div>
-                <div class="export-buttons">
-                    <button onclick="showExpiringInsurance()" class="export-btn"><i class="fas fa-exclamation-triangle"></i> Show Expiring Soon</button>
-                    <button onclick="showAllInsurance()" class="export-btn"><i class="fas fa-list"></i> Show All</button>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                    <button onclick="showAllInsurance()" class="filter-btn" style="background: var(--kenyan-green); flex: 1;">Show All</button>
+                    <button onclick="showExpiringInsurance()" class="filter-btn" style="background: var(--kenyan-red); flex: 1;"><i class="fas fa-exclamation-triangle"></i> Expiring Soon</button>
                 </div>
+                <p style="margin-top: 0.5rem; font-size: 0.8rem;"><i class="fas fa-info-circle"></i> Search by truck or trailer registration</p>
             </div>
 
-            <!-- Speed Governor Search Tab (Hidden) -->
-            <div id="speedSearchTab" style="display: none;">
+            <!-- Speed Governor Search Section -->
+            <div id="speedSection" style="display: none;">
                 <div class="search-filter">
                     <input type="text" id="speedSearchInput" class="filter-input" placeholder="Search by Truck or Trailer Reg...">
                     <button onclick="searchSpeed()" class="filter-btn"><i class="fas fa-search"></i> Search</button>
                     <button onclick="clearSpeedSearch()" class="filter-btn" style="background: #666;"><i class="fas fa-times"></i> Clear</button>
                 </div>
+                <button onclick="showAllSpeed()" class="filter-btn" style="margin-top: 0.5rem; background: var(--kenyan-green); width: 100%;">Show All Speed Records</button>
                 <p style="margin-top: 0.5rem; font-size: 0.8rem;"><i class="fas fa-info-circle"></i> Speed governor calibration dates</p>
             </div>
             
@@ -1262,43 +1265,49 @@
             });
             event.target.classList.add('active');
             
-            // Hide all search tabs
-            document.getElementById('truckSearchTab').style.display = 'none';
-            document.getElementById('inspectionSearchTab').style.display = 'none';
-            document.getElementById('insuranceSearchTab').style.display = 'none';
-            document.getElementById('speedSearchTab').style.display = 'none';
+            // Hide all sections first
+            document.getElementById('truckSection').style.display = 'none';
+            document.getElementById('inspectionSection').style.display = 'none';
+            document.getElementById('insuranceSection').style.display = 'none';
+            document.getElementById('speedSection').style.display = 'none';
             
-            // Show selected tab
-            document.getElementById(tabName + 'SearchTab').style.display = 'block';
+            // Show the selected section
+            document.getElementById(tabName + 'Section').style.display = 'block';
             
-            // Show appropriate data
+            // Handle results display based on tab
             const resultsDiv = document.getElementById('trackerResults');
             
             if (tabName === 'trucks') {
+                // For trucks, hide results initially (wait for search)
                 resultsDiv.style.display = 'none';
+                // Clear previous search input
+                document.getElementById('truckSearchInput').value = '';
             } else if (tabName === 'inspection') {
+                // Show all inspection records
                 showAllInspections();
             } else if (tabName === 'insurance') {
+                // Show all insurance records
                 showAllInsurance();
             } else if (tabName === 'speed') {
+                // Show all speed records
                 showAllSpeed();
             }
         }
 
-        // ==================== TRUCK LOCATION FUNCTIONS ====================
+                // ==================== TRUCK LOCATION FUNCTIONS ====================
         function searchTruck() {
             const input = document.getElementById('truckSearchInput').value.trim().toUpperCase();
             const resultsDiv = document.getElementById('trackerResults');
             
             resultsDiv.innerHTML = '';
-            resultsDiv.style.display = 'block';
+            resultsDiv.style.display = 'block'; // Make sure results are visible
             
             if (input === '') {
-                resultsDiv.innerHTML = '<div style="color: #666; text-align: center;"><i class="fas fa-exclamation-circle"></i> Please enter a truck number</div>';
+                resultsDiv.innerHTML = '<div style="color: #666; text-align: center; padding: 2rem;"><i class="fas fa-exclamation-circle"></i> Please enter a truck number</div>';
                 return;
             }
             
-            const matches = truckData.filter(t => t.reg.toUpperCase().includes(input));
+            const matches = truckData.filter(t => t.reg.toUpperCase().includes(input) || input.includes(t.reg.toUpperCase()));
             
             if (matches.length === 0) {
                 resultsDiv.innerHTML = `
@@ -1309,34 +1318,45 @@
                     </div>
                 `;
             } else {
+                let html = '';
                 matches.forEach(truck => {
                     let statusColor = truck.status.includes('Motion') ? '#27ae60' : 
                                      truck.status.includes('Waiting') ? '#f39c12' : '#e74c3c';
                     
-                    resultsDiv.innerHTML += `
-                        <div style="border-bottom: 1px solid #eee; padding: 1rem;">
-                            <div style="display: flex; gap: 1rem; align-items: center;">
+                    html += `
+                        <div style="border-bottom: 1px solid #eee; padding: 1rem 0;">
+                            <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
                                 <i class="fas fa-truck" style="font-size: 2rem; color: var(--kenyan-red);"></i>
                                 <div>
-                                    <h4>${truck.reg} ${truck.trailer ? '/ ' + truck.trailer : ''}</h4>
-                                    <span style="background: ${statusColor}; color: white; padding: 0.2rem 1rem; border-radius: 50px; font-size: 0.8rem;">
+                                    <h4 style="margin:0;">${truck.reg} ${truck.trailer ? '/ ' + truck.trailer : ''}</h4>
+                                    <span style="background: ${statusColor}; color: white; padding: 0.2rem 1rem; border-radius: 50px; font-size: 0.8rem; display: inline-block; margin-top: 0.3rem;">
                                         ${truck.status}
                                     </span>
                                 </div>
                             </div>
-                            <div style="display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin-top: 1rem;">
-                                <div><small>📍 Location:</small><br>${truck.location}</div>
-                                <div><small>📦 Container:</small><br>${truck.container}</div>
-                                <div><small>👤 Driver:</small><br>${truck.driver}</div>
-                                <div><small>📞 Phone:</small><br>${truck.phone}</div>
+                            <div style="display: grid; grid-template-columns: repeat(2,1fr); gap: 0.8rem;">
+                                <div><small style="color:#666;">📍 Location:</small><br>${truck.location}</div>
+                                <div><small style="color:#666;">📦 Container:</small><br>${truck.container}</div>
+                                <div><small style="color:#666;">👤 Driver:</small><br>${truck.driver}</div>
+                                <div><small style="color:#666;">📞 Phone:</small><br>${truck.phone}</div>
                             </div>
-                            ${truck.customer ? `<div style="margin-top: 0.5rem;"><small>👥 Customer: ${truck.customer}</small></div>` : ''}
+                            ${truck.customer ? `<div style="margin-top: 0.8rem; padding-top:0.5rem; border-top:1px dashed #ddd;"><small style="color:#666;">👥 Customer:</small> ${truck.customer}</div>` : ''}
                         </div>
                     `;
                 });
+                
+                // Add WhatsApp contact button
+                html += `
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 2px solid #eee;">
+                        <a href="https://wa.me/254720278970?text=I'm%20tracking%20truck%20${encodeURIComponent(matches[0].reg)}%20and%20need%20more%20information" class="btn-whatsapp" style="background: #25D366; color: white; padding: 0.5rem 1.5rem; border-radius: 50px; text-decoration: none; font-size: 0.9rem;" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Ask on WhatsApp
+                        </a>
+                    </div>
+                `;
+                
+                resultsDiv.innerHTML = html;
             }
         }
-
         // ==================== INSPECTION FUNCTIONS ====================
         function showAllInspections() {
             displayInspectionTable(inspectionData);
@@ -1538,4 +1558,3 @@
     </script>
 </body>
 </html>
-
